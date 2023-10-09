@@ -20,7 +20,7 @@ export default function Chart({ data, date = "30" }) {
           subtext: "(รายงานผลช่วงเวลา " + date + " วัน)",
           subtextStyle: {
             fontSize: 16,
-            fontFamily: 'Kanit'
+            fontFamily: "Kanit",
           },
         },
         toolbox: {

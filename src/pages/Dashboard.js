@@ -101,7 +101,6 @@ export default function Dashboard() {
       .catch((err) => console.log(err));
   }, [payload?.search]);
 
-
   useEffect(() => {
     axios
       .get(`https://disease.sh/v3/covid-19/countries?sort=cases`)
@@ -191,7 +190,6 @@ export default function Dashboard() {
     return month[date];
   }
 
-
   return (
     <div className="container	m-auto py-14 py-8 px-8">
       <label className="text-4xl flex items-center justify-center	">
@@ -206,17 +204,22 @@ export default function Dashboard() {
       </div>
       <Input
         label={
-          "ค้นหาช่วงจำนวนวันย้อนหลัง (ปัจจุบันข้อมูลอัพเดตล่าสุดอยู่ที่เดือน" +
+          "ค้นหาช่วงจำนวนวันย้อนหลังไม่เกิน 30 วัน (ปัจจุบันข้อมูลอัพเดตล่าสุดอยู่ที่เดือน" +
           txtMonth +
           ")"
         }
         placeholder={"กรุณาใส่ข้อมูลจำนวนวัน"}
         value={payload?.search}
         onChange={(e) => {
-          setPayload({ ...payload, search: e.target.value });
+          console.log("e ,", typeof e.target.value);
+          if (parseInt(e.target.value) < 31) {
+            setPayload({ ...payload, search: e.target.value });
+          } else {
+            setPayload({ ...payload, search: "" });
+          }
         }}
       />
-      <Chart data={chartData} date={payload?.search} />
+      <Chart data={chartData} date={payload?.search || "30"} />
       <label className="text-gray-800 text-lg ">
         ข้อมูลสถาณการณ์โควิดทั่วโลก (ปัจจุบันข้อมูลอัพเดตล่าสุดอยู่ที่เดือน
         {txtMonth})
@@ -226,7 +229,8 @@ export default function Dashboard() {
       <hr />
       <div className="mt-7">
         <label className="text-gray-800 text-lg ">
-          สถานการณ์ผู้ติดเชื้อโควิดทั่วโลก แบบรายประเทศ ล่าสุดวันที่ {new Date().toLocaleDateString()}
+          สถานการณ์ผู้ติดเชื้อโควิดทั่วโลก แบบรายประเทศ ล่าสุดวันที่{" "}
+          {new Date().toLocaleDateString()}
         </label>
       </div>
       <Table data={covidData} header={tableHeader} />
